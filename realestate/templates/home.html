@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<form class="form-inline my-2 my-lg-0" action="{% url 'search_results' %}" method="GET">
+  <input class="form-control mr-sm-2" type="search" name="type" placeholder="Type" aria-label="Type">
+  <input class="form-control mr-sm-2" type="search" name="location" placeholder="Location" aria-label="Location">
+  <input class="form-control mr-sm-2" type="search" name="price_min" placeholder="Min Price" aria-label="Min Price">
+  <input class="form-control mr-sm-2" type="search" name="price_max" placeholder="Max Price" aria-label="Max Price">
+  <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+</form>
+
+<style>
+  .text-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50vh;
+    background-color: #f5f5f5;
+  }
+  .text-content h2 {
+    font-family: 'Arial Black', Gadget, sans-serif;
+    font-size: 3em;
+    text-align: center;
+    padding: 20px;
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: inline-block;
+  }
+  .text-content h2 span {
+    background: linear-gradient(45deg, #ff6f61, #f8b400);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .form-inline {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+  }
+  .form-control {
+    margin: 5px;
+  }
+  .card {
+    margin: 20px 0;
+  }
+  .card img {
+    max-height: 200px;
+    object-fit: cover;
+  }
+</style>
+
+<div class="text-content">
+  <h2><span>"Your Perfect Home Awaits – Let’s Make It Yours!"</span></h2>
+</div>
+{% include 'carousel.html' %}
+<div class="row">
+  <div class="col-md-4">
+    <div class="card">
+      <h5 class="card-title">Houses</h5>
+      <img src="{% static 'images/house.jpg' %}" class="card-img-top" alt="House Image">
+      <div class="card-body">
+
+        <p class="card-text">Click to view all houses.</p>
+        <a href="{% url 'house_list' %}" class="btn btn-primary">All Houses</a>
+      </div>
+    </div>
+
+  </div>
+
+
+  <div class="col-md-4">
+
+    <div class="card">
+      <h5 class="card-title">Apartments</h5>
+      <img src="{% static 'images/apartment.jpg' %}" class="card-img-top" alt="Apartment Image">
+      <div class="card-body">
+
+        <p class="card-text">Click to view all apartments.</p>
+        <a href="{% url 'apartment_list' %}" class="btn btn-primary">All Apartments</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card">
+      <h5 class="card-title">Land</h5>
+      <img src="{% static 'images/land.jpg' %}" class="card-img-top" alt="Land Image">
+      <div class="card-body">
+
+        <p class="card-text">Click to view all land properties.</p>
+        <a href="{% url 'land_list' %}" class="btn btn-primary"> All Lands</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

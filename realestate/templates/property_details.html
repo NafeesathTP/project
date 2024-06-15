@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Property Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #f06, #ffba08);
+            padding: 20px;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .property-card {
+            width: calc(50% - 20px);
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .property-card {
+                width: 100%;
+            }
+        }
+
+        h2 {
+            color: #007bff;
+        }
+
+        p {
+            color: #555;
+        }
+
+        .favorite-btn {
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .favorite-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .favorite-btn.remove {
+            background-color: #dc3545;
+        }
+
+        .favorite-btn.remove:hover {
+            background-color: #c82333;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+     <meta name="csrf-token" content="{% csrf_token %}
+</head>
+<body>
+    <div class="container">
+        {% for property in properties %}
+            <div class="property-card">
+                <h2>{{ property.name }}</h2>
+                <img src="{{ property.image.url }}" alt="{{ property.name }}">
+                <p>{{ property.description }}</p>
+                <p>Location: {{ property.location }}</p>
+                <p>Price: ${{ property.price }}</p>
+                <a href="{% url 'home' %}">Back to Home</a>
+                <a href="{% url 'contacts' %}" class="btn btn-primary">Contacts</a>
+                <button class="favorite-btn {% if property.id in favorites %}remove{% endif %}" data-id="{{ property.id }}">
+                    {% if property.id in favorites %}
+                        Remove from Favorites
+                    {% else %}
+                        Add to Favorites
+                    {% endif %}
+                </button>
+            </div>
+        {% endfor %}
+    </div>
+
+    {% if not user.is_authenticated %}
+    <!-- Show login message if the user is not authenticated -->
+    <div class="container">
+        <h1>Please login to view property details</h1>
+        <a href="{% url 'signin' %}" class="btn btn-primary">Login</a>
+    </div>
+    {% endif %}
+
+    <script>
+        $(document).ready(function() {
+            $('.favorite-btn').click(function() {
+                var propertyId = $(this).data('id');
+                var button = $(this);
+
+                $.ajax({
+                    url: '{% url "favorites" %}',
+                    method: 'POST',
+                    data: {
+                        'property_id': propertyId,
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                    success: function(response) {
+                        if (response.status === 'added') {
+                            button.addClass('remove');
+                            button.text('Remove from Favorites');
+                        } else {
+                            button.removeClass('remove');
+                            button.text('Add to Favorites');
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

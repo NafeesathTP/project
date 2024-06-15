@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4 text-center">Apartment List</h1>
+    {% for apartment in apartments %}
+    <div class="card mb-4">
+        <div class="row no-gutters">
+            <div class="col-md-3">
+                <img src="{{ apartment.image.url }}" class="card-img" alt="{{ apartment.title }}">
+            </div>
+            <div class="col-md-9">
+                <div class="card-body">
+                    <h5 class="card-title">{{ apartment.title }}</h5>
+                    <p class="card-text">{{ apartment.description }}</p>
+                    <p class="card-text"><small class="text-muted">{{ apartment.location }}</small></p>
+                     <a href="{% url 'contacts' %}" class="btn btn-success">Contact</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% if not forloop.last %}
+    <hr class="my-4"> <!-- Add a horizontal line between apartments -->
+    {% endif %}
+    {% endfor %}
+    <div class="text-center mt-4">
+        <a href="{% url 'home' %}" class="btn btn-primary">Back to Home</a>
+    </div>
+</div>
+{% endblock %}

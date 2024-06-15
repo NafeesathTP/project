@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Favorite Properties</title>
+    <style>
+        /* Add your CSS styles here */
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>My Favorite Properties</h1>
+
+        {% if favorite_properties %}
+            {% for property in favorite_properties %}
+                <div class="property">
+                    <h2>{{ property.name }}</h2>
+                    <p>{{ property.description }}</p>
+                    <a href="{% url 'property_detail' property.id %}" class="btn-primary">View Property</a>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No favorite properties added yet.</p>
+        {% endif %}
+    </div>
+
+    <!-- JavaScript code -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js">
+         <meta name="csrf-token" content="{% csrf_token %}
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('.favorite-btn').click(function() {
+                var propertyId = $(this).data('id');
+                var button = $(this);
+
+                $.ajax({
+                    url: '{% url "favorites" %}',
+                    method: 'POST',
+                    data: {
+                        'property_id': propertyId,
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'  // Ensure the CSRF token is included
+                    },
+                    success: function(response) {
+                        if (response.status === 'added') {
+                            button.addClass('remove');
+                            button.text('Remove from Favorites');
+                        } else {
+                            button.removeClass('remove');
+                            button.text('Add to Favorites');
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
